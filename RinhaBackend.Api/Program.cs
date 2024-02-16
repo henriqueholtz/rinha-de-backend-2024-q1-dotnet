@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Mvc;
+using RinhaBackend.Api.DTO;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.MapPost("/clientes/{customerId}/transacoes", async (int customerId, [FromBody] TransactionDTO dto) => dto);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
