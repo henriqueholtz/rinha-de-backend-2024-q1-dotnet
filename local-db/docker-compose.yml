@@ -1,0 +1,39 @@
+version: '3.5'
+
+services:
+  api-01: &api
+    build:
+      context: ../RinhaBackend.Api
+      dockerfile: ../Dockerfile
+    container_name: api-01
+    environment:
+      - HTTP_PORTS=5000
+    ports:
+      - 5001:5000
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '90MB'
+
+  db:
+    image: postgres:12.18
+    hostname: db
+    environment:
+      - POSTGRES_PASSWORD=Rinh@2024q1
+      - POSTGRES_USER=rinha
+      - POSTGRES_DB=RinhaDb
+    ports:
+      - '5432:5432'
+    volumes:
+      - ../script.sql:/docker-entrypoint-initdb.d/script.sql
+      - ../postgres.conf:/docker-entrypoint-initdb.d/postgres.conf
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.8'
+    #       memory: '300MB'
+# networks:
+#   default:
+#     driver: bridge
+#     name: rinha-nginx-2024q1
