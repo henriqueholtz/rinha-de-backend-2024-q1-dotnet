@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RinhaBackend.Api.DTO;
+using RinhaBackend.Api.DTO.GetCustomerExtract;
+using RinhaBackend.Api.DTO.InsertTransaction;
 
 namespace RinhaBackend.Api.Controllers
 {
@@ -11,14 +12,33 @@ namespace RinhaBackend.Api.Controllers
         [HttpGet("/clientes/{customerId}/extrato", Name = "GetCustomerExtract")]
         public IActionResult GetCustomerExtract(int customerId)
         {
-            return Ok($"customerId: {customerId}");
+            var output = new OutputGetCustomerExtractDTO
+            {
+                Balance = new BalanceDTO
+                {
+                    ExtractDate = DateTime.Now,
+                    Limit = 10000,
+                    Total = -900
+                },
+                LatestTransactions = new List<TransactionDTO>
+                {
+                    new TransactionDTO
+                    {
+                        Date = DateTime.Now,
+                        Description = "descricao",
+                        Type = 'd',
+                        Value = 900
+                    }
+                }
+            };
+            return Ok(output);
         }
 
         // TODO: Accept only integers in customerId
         [HttpPost("/clientes/{customerId}/transacoes", Name = "InsertTransaction")]
-        public IActionResult InsertTransaction(int customerId, [FromBody] TransactionDTO dto)
+        public IActionResult InsertTransaction(int customerId, [FromBody] InputInsertTransactionDTO dto)
         {
-            return Ok(new {dto, customerId});
+            return Ok(new OutputInsertTransactionDTO { Balance = -900, Limit = 10000 });
         }
     }
 }

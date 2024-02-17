@@ -1,9 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace RinhaBackend.Api.DTO
+namespace RinhaBackend.Api.DTO.InsertTransaction
 {
     // TODO: Use record instead of a normal class
-    public class TransactionDTO()
+    public class InputInsertTransactionDTO()
     {
         [JsonPropertyName("Valor")]
         public decimal Value { get; set; }
