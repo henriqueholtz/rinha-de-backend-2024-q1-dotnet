@@ -30,7 +30,7 @@ namespace RinhaBackend.Api.DTO.GetCustomerExtract
 
     public class BalanceDTO
     {
-        public int Total { get; set; }
+        public decimal Total { get; set; }
 
         [JsonPropertyName("data_extrato")]
         public DateTime ExtractDate { get; set; }
