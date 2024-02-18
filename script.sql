@@ -4,7 +4,7 @@ CREATE TABLE Customers (
 );
 
 CREATE TABLE Transactions (
-   TransactionId INTEGER PRIMARY KEY,
+   TransactionId SERIAL PRIMARY KEY,
    CustomerId INTEGER NOT NULL,
    Value INTEGER NOT NULL,
    IsCredit BOOLEAN NOT NULL,
