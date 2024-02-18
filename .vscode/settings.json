@@ -1,0 +1,14 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "Rinha",
+      "database": "RinhaDb",
+      "username": "rinha",
+      "password": "Rinh@2024q1"
+    }
+  ]
+}
