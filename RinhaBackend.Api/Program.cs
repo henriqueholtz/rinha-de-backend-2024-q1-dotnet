@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using RinhaBackend.Api.Attributes;
 using RinhaBackend.Api.Context;
+using System.Net.Mime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +10,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<RinhaContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("RinhaConnection")));
 
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var result = new ValidationFailedResult(context.ModelState);
 
-builder.Services.AddControllers();
+        // TODO: add `using System.Net.Mime;` to resolve MediaTypeNames  
+        result.ContentTypes.Add(MediaTypeNames.Application.Json);
+
+        return result;
+    };
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
