@@ -3,6 +3,7 @@
 [Official repository - rinha-de-backend-2024-q1](https://github.com/zanfranceschi/rinha-de-backend-2024-q1)
 
 - :heavy_check_mark: **.NET 8**
+- :heavy_check_mark: **PostgreSQL**
 - :heavy_check_mark: **[Nginx](https://www.nginx.com/)**
 - :heavy_check_mark: **Entity Framework Core**
 - :heavy_check_mark: **Docker Support**
