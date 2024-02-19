@@ -16,7 +16,7 @@ namespace RinhaBackend.Api.Models
         public int CustomerId { get; set; }
 
         [Column("value")]
-        public decimal Value { get; set; }
+        public int Value { get; set; }
 
         [Column("iscredit")]
         public bool IsCredit { get; set; }

@@ -13,7 +13,7 @@ namespace RinhaBackend.Api.DTO.GetCustomerExtract
     public class TransactionDTO
     {
         [JsonPropertyName("valor")]
-        public decimal Value { get; set; }
+        public int Value { get; set; }
 
         // TODO: Type must be "c" or "d"
         [JsonPropertyName("tipo")]

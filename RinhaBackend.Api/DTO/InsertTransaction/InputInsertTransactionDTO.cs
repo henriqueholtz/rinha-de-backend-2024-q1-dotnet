@@ -6,7 +6,7 @@ namespace RinhaBackend.Api.DTO.InsertTransaction
     public class InputInsertTransactionDTO()
     {
         [JsonPropertyName("Valor")]
-        public decimal Value { get; set; }
+        public int Value { get; set; }
 
         // TODO: Type must be "c" or "d"
         [JsonPropertyName("Tipo")]

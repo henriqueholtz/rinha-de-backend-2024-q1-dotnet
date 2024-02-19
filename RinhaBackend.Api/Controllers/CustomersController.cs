@@ -16,7 +16,7 @@ namespace RinhaBackend.Api.Controllers
         private async Task<List<TransactionDTO>> GetLatestTransactionsAsync(int customerId)
         {
             List<TransactionDTO> result = new List<TransactionDTO>();
-            var transactions = await _context.Transactions.Where(t => t.CustomerId == customerId).OrderByDescending(o => o.Date).ToListAsync();
+            var transactions = await _context.Transactions.AsNoTracking().Where(t => t.CustomerId == customerId).OrderByDescending(o => o.Date).ToListAsync();
             foreach (var transaction in transactions)
             {
                 result.Add(new TransactionDTO
@@ -31,9 +31,9 @@ namespace RinhaBackend.Api.Controllers
             return result;
         }
 
-        private decimal GetBalance(List<TransactionDTO> transactions)
+        private int GetBalance(List<TransactionDTO> transactions)
         {
-            decimal balance = 0;
+            int balance = 0;
             foreach (var transaction in transactions)
             {
                 if (transaction.Type == 'c')
@@ -70,21 +70,36 @@ namespace RinhaBackend.Api.Controllers
         [HttpPost("/clientes/{customerId}/transacoes", Name = "InsertTransaction")]
         public async Task<IActionResult> InsertTransaction(int customerId, [FromBody] InputInsertTransactionDTO dto)
         {
-            Customer? customerDb = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == customerId);
+            // TODO: Validate if should return 422 instead of 400
+            Customer? customerDb = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.CustomerId == customerId);
             if (customerDb == null)
                 return BadRequest("Invalid customer");
 
-            await _context.Transactions.AddAsync(new Transaction
+            List<TransactionDTO> latestTransactions = await GetLatestTransactionsAsync(customerId);
+            int currentBalance = GetBalance(latestTransactions);
+            int currentLimit = customerDb.MaxLimit - currentBalance;
+            if (currentLimit < dto.Value)
+                return BadRequest("Limite ultrapassado!");
+
+            Transaction transaction = new Transaction
             {
                 CustomerId = customerId,
                 Date = DateTime.UtcNow,
                 Description = dto.Description,
                 IsCredit = dto.Type == 'c',
                 Value = dto.Value
-            });
+            };
+            await _context.Transactions.AddAsync(transaction);
             await _context.SaveChangesAsync();
-            
-            List<TransactionDTO> latestTransactions = await GetLatestTransactionsAsync(customerId);
+
+            TransactionDTO transactionDTO = new TransactionDTO
+            {
+                Value = transaction.Value,
+                Date = transaction.Date,
+                Description = transaction.Description,
+                Type = dto.Type
+            };
+            latestTransactions.Add(transactionDTO);
 
             return Ok(new OutputInsertTransactionDTO 
             { 
