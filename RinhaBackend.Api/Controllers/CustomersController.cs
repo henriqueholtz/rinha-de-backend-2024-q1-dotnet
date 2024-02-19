@@ -16,7 +16,7 @@ namespace RinhaBackend.Api.Controllers
         private async Task<List<TransactionDTO>> GetLatestTransactionsAsync(int customerId)
         {
             List<TransactionDTO> result = new List<TransactionDTO>();
-            var transactions = await _context.Transactions.AsNoTracking().Where(t => t.CustomerId == customerId).OrderByDescending(o => o.Date).ToListAsync();
+            var transactions = await _context.Transactions.AsNoTracking().Where(t => t.CustomerId == customerId).OrderByDescending(o => o.Date).Take(10).ToListAsync();
             foreach (var transaction in transactions)
             {
                 result.Add(new TransactionDTO
