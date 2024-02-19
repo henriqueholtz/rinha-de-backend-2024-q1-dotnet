@@ -36,3 +36,11 @@ dotnet ef migrations add "01 - initial migration" --project RinhaBackend.Api/Rin
 ```
 dotnet ef database update --project RinhaBackend.Api/RinhaBackend.Api.csproj
 ```
+
+---
+
+#### How to build the docker image to send to dockerhub
+
+```
+docker build . -t henriqueholtz/rinha-de-backend-2024-q1-dotnet:0.1 -f ./RinhaBackend.Api/Dockerfile
+```
